@@ -49,11 +49,19 @@ function AltChart({ telemetry }: altChartProps) {
         text: 'Altitude',
       },
     },
+    scales: {
+      x: {
+        display: false,
+        ticks: {
+          display: true
+        }
+      }
+    }
   };
 
   useEffect(() => {
-    const points = telemetry.map((telem) => telem.alt )
-    const labels = telemetry.map((telem) => telem.time )
+    const points = telemetry.map((telem) => telem.alt)
+    const labels = telemetry.map((telem) => telem.time)
 
     setData({
       ...data,

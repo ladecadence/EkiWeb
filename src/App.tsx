@@ -26,22 +26,27 @@ function App() {
     if (selectedMission != "") { fetchTelemetry() };
   }, [selectedMission, updateTelemetry])
 
-  // SSE
-  const sse = new EventSource(apiServer + apiSSE, { withCredentials: false });
-  sse.onerror = () => {
-    console.log("SSE Error");
-    sse.close();
-  }
-
   function checkUpdateMessage(msg: string) {
     console.log(msg)
     if (msg == "DATA") {
-      setUpdateTelemetry(updateTelemetry+1);
+      setUpdateTelemetry(updateTelemetry + 1);
     } else if (msg == "IMAGE") {
-      setUpdateImage(updateImage+1);
+      setUpdateImage(updateImage + 1);
     }
   }
-  sse.onmessage = e => checkUpdateMessage(e.data);
+
+  useEffect(() => {
+    const sse = new EventSource(apiServer + apiSSE, { withCredentials: false });
+    sse.onerror = () => {
+      console.log("SSE Error");
+      sse.close();
+    }
+    sse.onmessage = e => checkUpdateMessage(e.data);
+    return () => {
+      sse.close();
+    };
+
+  },[])
 
   return (
     <>
@@ -84,7 +89,7 @@ function App() {
           </div>
         </div>
         <div className="map">
-            <PosMap telemetry={telemetry}></PosMap>
+          <PosMap telemetry={telemetry}></PosMap>
         </div>
       </div >
     </>

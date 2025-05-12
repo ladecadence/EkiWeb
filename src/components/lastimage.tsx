@@ -7,19 +7,37 @@ interface imageProps {
 }
 
 function LastImage({ selectedMission = "", updateImage }: imageProps) {
-    const [lastImg, setLastImg] = useState("");
-    
-    useEffect(() => {
-        const fetchLastImg = async () => {
-          const url = await getLastImage(selectedMission);
-          setLastImg(url);
-        }
-        if (selectedMission != "") { fetchLastImg() };
-      }, [selectedMission, updateImage])
-    
-    return (
-        lastImg != "" ? <img src={lastImg} alt="LastImg" /> : 'loading...'
-    )
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [lastImg, setLastImg] = useState("");
+
+  useEffect(() => {
+    const fetchLastImg = async () => {
+      const url = await getLastImage(selectedMission);
+      setLastImg(url);
+    }
+    if (selectedMission != "") { fetchLastImg() };
+  }, [selectedMission, updateImage])
+
+  return (
+    <>
+      { lastImg != "" ? <img src={lastImg} alt="Last image" onClick={() => setDialogOpen(!dialogOpen)} /> : 'loading...'}
+      { dialogOpen && (
+        <dialog
+          className="image_dialog"
+          style={{ position: 'absolute' }}
+          open
+          onClick={() => setDialogOpen(!dialogOpen)}
+        >
+          <img
+            className="image_popup"
+            src={lastImg}
+            onClick={() => setDialogOpen(!dialogOpen)}
+            alt="Last image"
+          />
+        </dialog>
+      )}
+    </>
+  )
 
 }
 

@@ -301,3 +301,12 @@ caption {
   height: 12rem;
   width: 12rem;
 }
+
+@media screen and (max-width: 450px) {
+  .alt-chart-container  {
+    height: 11rem;
+  }
+  .leaflet-popup-content p {
+    font-size: 1.1rem;
+  }
+}
